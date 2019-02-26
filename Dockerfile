@@ -1,31 +1,25 @@
-FROM openjdk:jre-slim
+FROM mrchnk/air-sdk:compiler
 
-LABEL description "Dockerized Adobe AIR SDK"
-LABEL maintainer "Nikolay Sukharev <mrchnk@gmail.com>"
+LABEL description="Dockerized Adobe AIR SDK"
+LABEL maintainer="Nikolay Sukharev <mrchnk@gmail.com>"
 
-RUN apt-get update && apt-get install -y \
-        p7zip-full wget
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    xauth \
+  && rm -rf /var/lib/apt/lists/*
 
-# Download and extract AIR SDK for MAC
-WORKDIR /root
-RUN wget -q http://airdownload.adobe.com/air/mac/download/32.0/AIRSDK_Compiler.dmg
+RUN dpkg --add-architecture i386 \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends \
+    wine wine32 winbind \
+  && rm -rf /var/lib/apt/lists/*
 
-# dmg archive has some extra data ignore that errors
-RUN 7z x AIRSDK_Compiler.dmg -i!AIRSDK_Compiler || exit 0
-RUN 7z x AIRSDK_Compiler -i!"AIR SDK" || exit 0
-RUN rm AIRSDK_Compiler AIRSDK_Compiler.dmg
-RUN mv "AIR SDK" /usr/local/share/AIRSDK
+RUN curl -SL 'https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks' -o /usr/local/bin/winetricks \
+  && chmod +x /usr/local/bin/winetricks
 
-# Add +x to executables
-WORKDIR /usr/local/share/AIRSDK/bin
-RUN chmod +x \
-        asdoc compc mxmlc \
-        aasdoc acompc amxmlc \
-        fdb optimizer swcdepends swfdump adt
+ENV WINEPREFIX /root/.wine
+ENV WINEARCH win32
 
-# Export PATH and standard AIR environment variables
-ENV PATH /usr/local/share/AIRSDK/bin:${PATH}
-ENV AIR_HOME /usr/local/share/AIRSDK
-
-# Return to the root
-WORKDIR /
+COPY asound.conf /etc/asound.conf
+COPY adl ${AIR_SDK_HOME}/bin/adl
+RUN chmod +x ${AIR_SDK_HOME}/bin/adl

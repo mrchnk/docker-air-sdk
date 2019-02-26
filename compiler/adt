@@ -1,0 +1,5 @@
+#!/bin/sh
+
+VMARGS="-Xmx512m "
+
+java $VMARGS $SETUP_SH_VMARGS -jar "${AIR_SDK_HOME}/lib/adt.jar" "$@"
