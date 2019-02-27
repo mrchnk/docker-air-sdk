@@ -18,20 +18,12 @@ Size: ~150M
 :adl
 ----
 
-Extension over :compiler. It uses wine to run adl.exe. It is available as adl
+Extension over :compiler. It uses wine to run adl.exe. Command is available as `adl`
 shell script
 
 Size: ~300M+
 
-:mobile
--------
+:asconfigc
+----------
 
-Another extension over :compiler to package mobile applications for android and
-iOS. It contains all the AoT libs and tools. So it's size is much more bigger.
-
-Size: ~400M+
-
-:swissknife
------------
-
-ant & asconfigc added to :adl
+Extension over :compiler. Additions is asconfigc utility as well as node and npm

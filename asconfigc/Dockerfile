@@ -1,6 +1,6 @@
-FROM mrchnk/air-sdk:adl
+FROM mrchnk/air-sdk:compiler
 
-LABEL description="Dockerized Adobe AIR SDK (compiler + adl debug launcher + asconfigc)"
+LABEL description="Dockerized Adobe AIR SDK (compiler + asconfigc utility)"
 LABEL maintainer="Nikolay Sukharev <mrchnk@gmail.com>"
 
 RUN apt-get update \

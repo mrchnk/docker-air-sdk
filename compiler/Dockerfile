@@ -35,6 +35,8 @@ RUN chmod +x \
 
 # Export PATH and standard AIR environment variables
 ENV PATH ${AIR_SDK_HOME}/bin:${PATH}
+ENV AIR_HOME ${AIR_SDK_HOME}
+ENV AIR_SDK ${AIR_SDK_HOME}
 
 # Return to the root
 WORKDIR /

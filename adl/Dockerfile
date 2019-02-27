@@ -26,12 +26,16 @@ WORKDIR /root
 RUN curl -fsSL ${AIR_SDK_URL} -o AIRSDK.zip \
   && echo "${AIR_SDK_SHA} *AIRSDK.zip" | sha256sum -c - \
   && unzip AIRSDK.zip \
-    bin/adl.exe runtimes/* \
+    bin/adl.exe runtimes/air/win/* \
     -d ${AIR_SDK_HOME} \
   && rm AIRSDK.zip
 
+# Disable sound
 COPY asound.conf /etc/asound.conf
-COPY adl ${AIR_SDK_HOME}/bin/adl
-RUN chmod +x ${AIR_SDK_HOME}/bin/adl
+
+# Add adl wine runner
+WORKDIR ${AIR_SDK_HOME}/bin
+COPY adl .
+RUN chmod +x adl
 
 WORKDIR /
