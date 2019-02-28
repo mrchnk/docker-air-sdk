@@ -1,3 +1,28 @@
-#!/bin/sh
+#!/bin/bash
 
-wine $AIR_SDK_HOME/bin/adl.exe $@
+function win_arg {
+  if [ -e "$1" ]; then
+    win=`winepath -w "$1"`
+    printf "%q" "$win"
+  else
+    printf "%q" "$1"
+  fi
+}
+
+args=""
+for arg in "$@"
+do
+  arg=`win_arg "$arg"`
+  args="$args $arg"
+done
+
+_term() {
+  kill -TERM "$wine_pid" 2>/dev/null
+}
+
+trap _term SIGTERM
+wine $AIR_SDK_HOME/bin/adl.exe $args &
+
+wine_pid=$!
+wait "$wine_pid"
+
